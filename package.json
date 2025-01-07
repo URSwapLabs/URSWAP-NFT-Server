@@ -12,10 +12,12 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "http-proxy-middleware": "^3.0.3",
     "install": "^0.13.0",
     "node-fetch": "^3.3.2",
-    "npm": "^11.0.0"
+    "npm": "^11.0.0",
+    "openai": "^4.77.3"
   }
 }
