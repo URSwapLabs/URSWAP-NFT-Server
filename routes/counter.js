@@ -21,11 +21,14 @@ router.post('/updateCounter', async (req, res) => {
             })
             await counter.save();
         } else {
-            if(counter.nftGenerations >= process.env.NFT_LIMIT) {
-                return res.status(400).json({ success: false, message: "Limit Reached, Please mint NFT to continue" });
-            }
+            // if(counter.nftGenerations >= process.env.NFT_LIMIT) {
+            //     return res.status(400).json({ success: false, message: "Limit Reached, Please mint NFT to continue" });
+            // }
             counter.nftGenerations += 1;
             counter.imageURI = imageURI;
+            if(counter.nftGenerations >= process.env.NFT_LIMIT) {
+                counter.isPaid = false;
+            }
             await counter.save();
         }
 
@@ -33,6 +36,30 @@ router.post('/updateCounter', async (req, res) => {
 
     } catch (error) {
         console.log("Error, while updating counter");
+        return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+})
+
+router.post("/setPaid", async (req, res) => {
+    const { walletAddress } = req.body;
+
+    try {
+        if(!walletAddress) {
+            return res.status(400).json({ success: false, message: "Invalid input data" });
+        }
+
+        let counter = await Counter.findOne({ walletAddress });
+
+        if(!counter) {
+            return res.status(404).json({ success: false, message: "Not Found" });
+        }
+
+        counter.isPaid = true;
+        
+        return res.status(200).json({ success: true, message: "$UR Paid Successfully" });
+        
+    } catch (error) {
+        console.log("Error, while getting counter");
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 })
@@ -53,6 +80,7 @@ router.post("/clearCounter", async (req, res) => {
 
         counter.imageURI = "";
         counter.nftGenerations = 0;
+        counter.isPaid = false;
         await counter.save();
 
         return res.status(200).json({ success: true, message: "Counter Cleared Successfully" });
