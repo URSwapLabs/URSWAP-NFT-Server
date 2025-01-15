@@ -7,7 +7,7 @@ router.post('/updateCounter', async (req, res) => {
     const { walletAddress, imageURI } = req.body;
 
     try {
-        if(!walletAddress || !imageURI) {
+        if(!walletAddress) {
             return res.status(400).json({ success: false, message: "Invalid input data" });
         }
 
