@@ -16,9 +16,7 @@ router.post('/updateCounter', async (req, res) => {
         if (!counter) {
             return res.status(404).json({ success: false, message: "Not Found" });
         } else {
-            // if(counter.nftGenerations >= process.env.NFT_LIMIT) {
-            //     return res.status(400).json({ success: false, message: "Limit Reached, Please mint NFT to continue" });
-            // }
+            
             counter.nftGenerations += 1;
             counter.imageURI = imageURI;
             if (counter.nftGenerations >= process.env.NFT_LIMIT) {
