@@ -52,6 +52,7 @@ router.post("/setPaid", async (req, res) => {
             })
             await counter.save();
         } else {
+            counter.nftGenerations = 0;
             counter.isPaid = true;
             await counter.save();
         }
