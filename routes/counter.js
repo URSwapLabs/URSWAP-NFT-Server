@@ -47,7 +47,7 @@ router.post("/setPaid", async (req, res) => {
             counter = new Counter({
                 walletAddress,
                 nftGenerations: 1,
-                imageURI: imageURI,
+                imageURI: "",
                 isPaid: true
             })
             await counter.save();
