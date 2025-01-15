@@ -54,6 +54,7 @@ router.post("/setPaid", async (req, res) => {
         } else {
             counter.nftGenerations = 0;
             counter.isPaid = true;
+            counter.imageURI = "",
             await counter.save();
         }
 
