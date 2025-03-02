@@ -3,6 +3,8 @@ const cors = require('cors');
 const proxyRoutes = require('./routes/proxy');
 const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
+const collection = require('./routes/collection');
+const position = require('./routes/position');
 const connectDb = require('./db');
 
 const app = express();
@@ -13,6 +15,8 @@ app.use(express.json());
 app.use('/proxy', proxyRoutes);
 app.use('/generateNft', generateNft);
 app.use('/counter', counter);
+app.use('/collection', collection);
+app.use('/position', position);
 
 connectDb();
 
