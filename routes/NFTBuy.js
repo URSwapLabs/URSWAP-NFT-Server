@@ -62,4 +62,33 @@ router.get('/getCollections', async (req, res) => {
     }
 });
 
+router.get("/checkCollection", async (req, res) => {
+    try {
+        const { walletAddress, collectionAddress } = req.query;
+
+        if (!walletAddress || !collectionAddress) {
+            return res.status(400).json({ message: "walletAddress and collectionAddress are required" });
+        }
+
+        const user = await NFTBuy.findOne({ walletAddress });
+        
+        if (!user) {
+            return res.status(404).json({ message: "Wallet address not found" });
+        }
+
+        const collectionExists = user.nftCollections.some(
+            (collection) => collection.collectionAddress === collectionAddress
+        );
+
+        if (collectionExists) {
+            return res.status(200).json({ exists: true, message: "Collection found" });
+        } else {
+            return res.status(404).json({ exists: false, message: "Collection not found" });
+        }
+    } catch (error) {
+        console.error("Error checking collection:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 module.exports = router;
