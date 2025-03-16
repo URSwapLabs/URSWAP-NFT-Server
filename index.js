@@ -5,6 +5,7 @@ const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
 const collection = require('./routes/collection');
 const position = require('./routes/position');
+const nftBuy = require('./routes/NFTBuy');
 const connectDb = require('./db');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use('/generateNft', generateNft);
 app.use('/counter', counter);
 app.use('/collection', collection);
 app.use('/position', position);
+app.use('/nftBuy', nftBuy);
 
 connectDb();
 
