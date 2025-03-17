@@ -37,10 +37,10 @@ router.put("/updateBid", async (req, res) => {
         }
 
         const userAuction = await AuctionNFT.findOne({ walletAddress });
-        if (!userAuction) return res.status(404).json({ message: "User auction not found" });
+        if (!userAuction) return res.status(200).json({ message: "User auction not found" });
 
         const nft = userAuction.NFTs.find(nft => nft.auctionId === auctionId);
-        if (!nft) return res.status(404).json({ message: "Auction not found" });
+        if (!nft) return res.status(200).json({ message: "Auction not found" });
 
         nft.bidAmount = bidAmount;
         await userAuction.save();
@@ -58,7 +58,7 @@ router.get("/userAuctions", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(404).json({ message: "No auctions found for this user" });
+            return res.status(200).json({ message: "No auctions found for this user" });
         }
 
         res.status(200).json(userAuction);
@@ -74,12 +74,12 @@ router.get("/userAuction", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(404).json({ message: "No auctions found for this user" });
+            return res.status(200).json({ message: "No auctions found for this user" });
         }
 
         const nft = userAuction.NFTs.find(nft => nft.auctionId === auctionId);
         if (!nft) {
-            return res.status(404).json({ message: "Auction not found" });
+            return res.status(200).json({ message: "Auction not found" });
         }
 
         res.status(200).json(nft);
@@ -95,12 +95,12 @@ router.get("/createdAuctions", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(404).json({ message: "No auctions found for this user" });
+            return res.status(200).json({ message: "No auctions found for this user" });
         }
 
         const nfts = userAuction.NFTs.filter(nft => nft.creatorAddress === creatorAddress);
         if (nfts.length === 0) {
-            return res.status(404).json({ message: "No auctions found for this creator" });
+            return res.status(200).json({ message: "No auctions found for this creator" });
         }
 
         res.status(200).json(nfts);
