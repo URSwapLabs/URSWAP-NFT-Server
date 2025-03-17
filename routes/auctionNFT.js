@@ -52,9 +52,9 @@ router.put("/updateBid", async (req, res) => {
     }
 });
 
-router.get("/userAuctions/:walletAddress", async (req, res) => {
+router.get("/userAuctions", async (req, res) => {
     try {
-        const { walletAddress } = req.params;
+        const { walletAddress } = req.query;
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
@@ -68,9 +68,9 @@ router.get("/userAuctions/:walletAddress", async (req, res) => {
     }
 });
 
-router.get("/userAuction/:walletAddress/:auctionId", async (req, res) => {
+router.get("/userAuction", async (req, res) => {
     try {
-        const { walletAddress, auctionId } = req.params;
+        const { walletAddress, auctionId } = req.query;
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
@@ -89,9 +89,9 @@ router.get("/userAuction/:walletAddress/:auctionId", async (req, res) => {
     }
 });
 
-router.get("/createdAuctions/:walletAddress/:creatorAddress", async (req, res) => {
+router.get("/createdAuctions", async (req, res) => {
     try {
-        const { walletAddress, creatorAddress } = req.params;
+        const { walletAddress, creatorAddress } = req.query;
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
