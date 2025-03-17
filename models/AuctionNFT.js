@@ -15,6 +15,6 @@ const auctionSchema = new mongoose.Schema({
     NFTs: { type: [nftSchema], default: [] }
 });
 
-const AuctionNFT = mongoose.model('Collections', auctionSchema);
+const AuctionNFT = mongoose.model('AuctionNFT', auctionSchema);
 
 module.exports = AuctionNFT;
