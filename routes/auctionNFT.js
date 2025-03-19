@@ -95,18 +95,18 @@ router.get("/createdAuctions", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(200).json({ message: "No auctions found for this user" });
+            return res.status(200).json({ success: false, message: "No auctions found for this user" });
         }
 
         const nfts = userAuction.NFTs.filter(nft => nft.creatorAddress === creatorAddress);
         if (nfts.length === 0) {
-            return res.status(200).json({ message: "No auctions found for this creator" });
+            return res.status(200).json({ success: false, message: "No auctions found for this creator" });
         }
 
-        res.status(200).json(nfts);
+        res.status(200).json({ success: false, nfts });
     } catch (error) {
         console.error("Error fetching auctions:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ success: false, message: "Internal server error" });
     }
 });
 
