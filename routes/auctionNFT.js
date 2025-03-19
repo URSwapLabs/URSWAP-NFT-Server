@@ -117,13 +117,13 @@ router.delete("/removeNFT", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(404).json({ success: false, message: "User auction not found" });
+            return res.status(200).json({ success: false, message: "User auction not found" });
         }
 
         const updatedNFTs = userAuction.NFTs.filter(nft => nft.auctionId !== auctionId);
 
         if (updatedNFTs.length === userAuction.NFTs.length) {
-            return res.status(404).json({ success: false, message: "NFT not found in user's auctions" });
+            return res.status(200).json({ success: false, message: "NFT not found in user's auctions" });
         }
 
         userAuction.NFTs = updatedNFTs;
