@@ -58,13 +58,13 @@ router.get("/userAuctions", async (req, res) => {
         const userAuction = await AuctionNFT.findOne({ walletAddress });
 
         if (!userAuction) {
-            return res.status(200).json({ message: "No auctions found for this user" });
+            return res.status(200).json({ success: false, message: "No auctions found for this user" });
         }
 
-        res.status(200).json(userAuction);
+        res.status(200).json({ success:true, userAuction });
     } catch (error) {
         console.error("Error fetching user auctions:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ success: false, message: "Internal server error" });
     }
 });
 
