@@ -110,4 +110,31 @@ router.get("/createdAuctions", async (req, res) => {
     }
 });
 
+router.delete("/removeNFT", async (req, res) => {
+    try {
+        const { walletAddress, auctionId } = req.query;
+
+        const userAuction = await AuctionNFT.findOne({ walletAddress });
+
+        if (!userAuction) {
+            return res.status(404).json({ success: false, message: "User auction not found" });
+        }
+
+        const updatedNFTs = userAuction.NFTs.filter(nft => nft.auctionId !== auctionId);
+
+        if (updatedNFTs.length === userAuction.NFTs.length) {
+            return res.status(404).json({ success: false, message: "NFT not found in user's auctions" });
+        }
+
+        userAuction.NFTs = updatedNFTs;
+        await userAuction.save();
+
+        res.status(200).json({ success: true, message: "NFT removed successfully", updatedNFTs });
+
+    } catch (error) {
+        console.error("Error removing NFT:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
+
 module.exports = router;
