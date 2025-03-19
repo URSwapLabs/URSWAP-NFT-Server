@@ -103,7 +103,7 @@ router.get("/createdAuctions", async (req, res) => {
             return res.status(200).json({ success: false, message: "No auctions found for this creator" });
         }
 
-        res.status(200).json({ success: false, nfts });
+        res.status(200).json({ success: true, nfts });
     } catch (error) {
         console.error("Error fetching auctions:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
