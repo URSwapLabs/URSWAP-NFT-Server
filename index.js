@@ -26,7 +26,8 @@ app.use(session({
     cookie: {
         secure: true,
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: 'none',
+        domain: 'urswap-marketplace.vercel.app'
     },
 }));
 
