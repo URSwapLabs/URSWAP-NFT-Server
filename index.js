@@ -10,6 +10,7 @@ const nftBuy = require('./routes/NFTBuy');
 const nftAuction = require('./routes/auctionNFT');
 const discord = require('./socials/discordVerification');
 const connectDb = require('./db');
+require("dotenv").config();
 
 const app = express();
 
@@ -19,9 +20,10 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(session({
-    secret: "super_secret_key",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true, sameSite: 'none' },
 }));
 
 app.use('/proxy', proxyRoutes);
