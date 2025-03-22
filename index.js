@@ -28,7 +28,8 @@ app.use(session({
         httpOnly: true,
         sameSite: 'none',
         domain: 'urswap-marketplace.vercel.app',
-        path: '/'
+        path: '/',
+        maxAge: 24 * 60 * 60 * 1000
     },
 }));
 
