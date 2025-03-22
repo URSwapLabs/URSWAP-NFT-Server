@@ -27,7 +27,8 @@ app.use(session({
         secure: true,
         httpOnly: true,
         sameSite: 'none',
-        domain: 'urswap-marketplace.vercel.app'
+        domain: 'urswap-marketplace.vercel.app',
+        path: '/'
     },
 }));
 
