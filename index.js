@@ -23,7 +23,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true, sameSite: 'none' },
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'None'
+    },
 }));
 
 app.use('/proxy', proxyRoutes);
