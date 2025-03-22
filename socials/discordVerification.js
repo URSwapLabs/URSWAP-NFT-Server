@@ -38,7 +38,9 @@ router.get("/auth/discord/callback", async (req, res) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        req.session.userId = userResponse.data.id; // Store User ID in session
+        req.session.userId = userResponse.data.id;
+
+        console.log("Session data after login: ", req.session);
 
         res.redirect("http://localhost:3000/follow"); // Redirect to frontend
     } catch (error) {
