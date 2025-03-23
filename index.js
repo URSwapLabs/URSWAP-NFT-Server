@@ -28,6 +28,7 @@ app.use(session({
         httpOnly: true,
         sameSite: 'none',
         // domain: 'urswap-marketplace.vercel.app',
+        domain: '.railway.app',
         path: '/',
         maxAge: 24 * 60 * 60 * 1000
     },
