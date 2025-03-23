@@ -76,4 +76,8 @@ router.get("/verify-discord", async (req, res) => {
 
 client.login(BOT_TOKEN);
 
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
 module.exports = router;
