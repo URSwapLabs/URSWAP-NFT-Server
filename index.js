@@ -47,4 +47,5 @@ connectDb();
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+    console.log("Session Secret: ", process.env.SESSION_SECRET);
 });
