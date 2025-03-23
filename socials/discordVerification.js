@@ -42,7 +42,9 @@ router.get("/auth/discord/callback", async (req, res) => {
 
         console.log("Session data after login: ", req.session);
 
-        res.redirect("https://urswap-marketplace.vercel.app/follow");
+        req.session.save(() => {
+            res.redirect("https://urswap-marketplace.vercel.app/follow");
+        });
     } catch (error) {
         console.error("OAuth Error:", error.response ? error.response.data : error.message);
         res.status(500).send("Authentication Failed!");
