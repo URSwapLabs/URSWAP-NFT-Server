@@ -80,7 +80,7 @@ router.get("/verify-discord", async (req, res) => {
             res.json({ success: false, message: "User is not in the server." });
         }
     } catch (error) {
-        console.error("Failed to check user membership", error);
+        console.error("Failed to check user membership", error?.rawError);
         res.status(500).json({ error: "Failed to check user membership", details: error.message });
     }
 });
