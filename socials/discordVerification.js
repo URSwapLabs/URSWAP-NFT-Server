@@ -38,13 +38,21 @@ router.get("/auth/discord/callback", async (req, res) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        req.session.userId = userResponse.data.id;
+        // req.session.userId = userResponse.data.id;
 
-        console.log("Session data after login: ", req.session);
+        // console.log("Session data after login: ", req.session);
 
-        req.session.save(() => {
-            res.redirect("https://urswap-marketplace.vercel.app/follow");
+        res.cookie("discordUser", userResponse.data.id, {
+            httpOnly: true,
+            secure: true, // HTTPS only
+            sameSite: "none", // Cross-site allowed
+            signed: true, // Signed cookie
+            maxAge: 15 * 60 * 1000, // 15 minutes
         });
+
+        // req.session.save(() => {
+        res.redirect("https://urswap-marketplace.vercel.app/follow");
+        // });
     } catch (error) {
         console.error("OAuth Error:", error.response ? error.response.data : error.message);
         res.status(500).send("Authentication Failed!");
@@ -53,9 +61,10 @@ router.get("/auth/discord/callback", async (req, res) => {
 
 router.get("/verify-discord", async (req, res) => {
     console.log("Inside verify-discord");
-    const userId = req.session.userId;
+    // const userId = req.session.userId;
+    const userId = req.signedCookies.discordUser;
     console.log("userId: ", userId);
-    if (!req.session.userId) {
+    if (!userId) {
         console.log("User not logged in");
         return res.json({ joined: false, error: "User not logged in" });
     }

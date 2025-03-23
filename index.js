@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const proxyRoutes = require('./routes/proxy');
 const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
@@ -19,20 +20,21 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: true,
-        httpOnly: true,
-        sameSite: 'none',
-        // domain: 'urswap-marketplace.vercel.app',
-        domain: '.railway.app',
-        path: '/',
-        maxAge: 24 * 60 * 60 * 1000
-    },
-}));
+// app.use(session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         secure: true,
+//         httpOnly: true,
+//         sameSite: 'none',
+//         // domain: 'urswap-marketplace.vercel.app',
+//         domain: '.railway.app',
+//         path: '/',
+//         maxAge: 24 * 60 * 60 * 1000
+//     },
+// }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use('/proxy', proxyRoutes);
 app.use('/generateNft', generateNft);
@@ -48,5 +50,4 @@ connectDb();
 const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
-    console.log("Session Secret: ", process.env.SESSION_SECRET);
 });
