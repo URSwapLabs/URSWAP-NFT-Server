@@ -66,7 +66,7 @@ router.get("/verify-discord", async (req, res) => {
     console.log("userId: ", userId);
     if (!userId) {
         console.log("User not logged in");
-        return res.json({ joined: false, error: "User not logged in" });
+        return res.json({ success: false, error: "User not logged in" });
     }
     try {
         const guild = await client.guilds.fetch(GUILD_ID);
