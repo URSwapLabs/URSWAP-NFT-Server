@@ -40,7 +40,7 @@ router.get("/auth/discord/callback", async (req, res) => {
 
         // req.session.userId = userResponse.data.id;
 
-        console.log("Session data after login: ", req.session?.userId);
+        console.log("Session data after login: ", userResponse.data.id);
 
         res.cookie("discordUser", userResponse.data.id, {
             httpOnly: true,
