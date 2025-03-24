@@ -12,6 +12,7 @@ const nftBuy = require('./routes/NFTBuy');
 const nftAuction = require('./routes/auctionNFT');
 const discord = require('./socials/discordVerification');
 const twitter = require('./socials/twitter');
+const telegram = require('./socials/telegram');
 const connectDb = require('./db');
 require("dotenv").config();
 
@@ -42,6 +43,7 @@ app.use('/nftBuy', nftBuy);
 app.use('/nftAuction', nftAuction);
 app.use('/discord', discord);
 app.use('/twitter', twitter);
+app.use('/telegram', telegram);
 
 connectDb();
 
