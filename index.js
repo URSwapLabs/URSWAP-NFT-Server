@@ -45,7 +45,7 @@ app.use('/nftAuction', nftAuction);
 app.use('/discord', discord);
 app.use('/twitter', twitter);
 app.use('/telegram', telegram);
-app.use('youtube', youtube);
+app.use('/youtube', youtube);
 
 connectDb();
 
