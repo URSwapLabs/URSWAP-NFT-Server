@@ -3,6 +3,7 @@ const cors = require('cors');
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+const user = require('./routes/user');
 const proxyRoutes = require('./routes/proxy');
 const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
@@ -10,7 +11,7 @@ const collection = require('./routes/collection');
 const position = require('./routes/position');
 const nftBuy = require('./routes/NFTBuy');
 const nftAuction = require('./routes/auctionNFT');
-const discord = require('./socials/discordVerification');
+const discord = require('./socials/discord');
 const twitter = require('./socials/twitter');
 const telegram = require('./socials/telegram');
 const youtube = require('./socials/youtube');
@@ -35,6 +36,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/user', user);
 app.use('/proxy', proxyRoutes);
 app.use('/generateNft', generateNft);
 app.use('/counter', counter);

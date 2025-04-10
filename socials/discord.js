@@ -1,102 +1,94 @@
-// const express = require("express");
-// const { Client, GatewayIntentBits } = require("discord.js");
-// const { default: axios } = require("axios");
+const express = require("express");
+const { Client, GatewayIntentBits } = require("discord.js");
+const { default: axios } = require("axios");
+require("dotenv").config();
 
-// const app = express();
-// const PORT = 8080;
+const router = express.Router();
 
-// const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
-// // const fs = require('fs');
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const GUILD_ID = process.env.GUILD_ID;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
-// // // Load existing users
-// // let users = [];
-// // try {
-// //   users = JSON.parse(fs.readFileSync('./users.json'));
-// // } catch (err) {
-// //   console.error('Error reading users.json:', err);
-// // }
+router.get("/auth/discord", (req, res) => {
+    const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify`;
+    res.redirect(discordAuthUrl);
+});
 
-// // Event: When the bot is ready
-// client.on('ready', () => {
-//   console.log(`Logged in as ${client.user.tag}`);
-// });
+router.get("/auth/discord/callback", async (req, res) => {
+    const code = req.query.code;
 
-// client.on('guildMemberAdd', (member) => {
-//     if (member.guild.id === yourServerId) {
-//       console.log(`${member.user.tag} joined the server!`);
-//       users.push(member.user.id); // Add user ID to the list
-//       fs.writeFileSync('users.json', JSON.stringify(users)); // Save to file
-//     }
-// });
+    try {
+        const tokenResponse = await axios.post("https://discord.com/api/oauth2/token", new URLSearchParams({
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            grant_type: "authorization_code",
+            code,
+            redirect_uri: REDIRECT_URI,
+        }).toString(), { headers: { "Content-Type": "application/x-www-form-urlencoded" } });
 
-// app.get("/check-discord-follow", async (req, res) => {
-//     const { userId } = req.query;
-//     if (!userId) return res.status(400).json({ error: "User ID is required" });
+        const accessToken = tokenResponse.data.access_token;
 
-//     try {
-//         const guild = await client.guilds.fetch(yourServerId);
-//         const member = await guild.members.fetch(userId);
+        const userResponse = await axios.get("https://discord.com/api/users/@me", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
 
-//         if (member) {
-//             res.json({ success: true, message: "User is in the Discord server!" });
-//         } else {
-//             res.json({ success: false, message: "User is not in the server." });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: "Failed to check user membership", details: error.message });
-//     }
-// });
+        console.log("Session data after login: ", userResponse.data);
 
-// app.listen(PORT, () => {
-//     console.log(`Server running on http://localhost:${PORT}`);
-// });
+        res.cookie("discordUser", userResponse.data.id, {
+            httpOnly: true,
+            secure: true, // HTTPS only
+            sameSite: "none", // Cross-site allowed
+            signed: true, // Signed cookie
+            maxAge: 15 * 60 * 1000, // 15 minutes
+        });
 
-// const CLIENT_ID = "1352964542027796511";
-// const CLIENT_SECRET = "NjigqXzPbYSFj2e7bdFyOFn0We6bWknA";
-// const REDIRECT_URI = "http://localhost:8080/auth/discord/callback";
+        // req.session.save(() => {
+        res.redirect("https://urswap-marketplace.vercel.app/follow");
+        // });
+    } catch (error) {
+        console.error("OAuth Error:", error.response ? error.response.data : error.message);
+        res.status(500).send("Authentication Failed!");
+    }
+});
 
-// app.get("/auth/discord/callback", async (req, res) => {
-//     const code = req.query.code;
+router.get("/verify-discord", async (req, res) => {
+    console.log("Inside verify-discord");
+    // const userId = req.session.userId;
+    const userId = req.signedCookies.discordUser;
+    console.log("userId: ", userId);
+    if (!userId) {
+        console.log("User not logged in");
+        return res.json({ success: false, error: "User not logged in" });
+    }
+    try {
+        const guild = await client.guilds.fetch(GUILD_ID);
+        const member = await guild.members.fetch(userId);
 
-//     try {
-//         // 🔥 Exchange code for access token
-//         const tokenResponse = await axios.post("https://discord.com/api/oauth2/token", new URLSearchParams({
-//             client_id: CLIENT_ID,
-//             client_secret: CLIENT_SECRET,
-//             grant_type: "authorization_code",
-//             code,
-//             redirect_uri: REDIRECT_URI
-//         }).toString(), { headers: { "Content-Type": "application/x-www-form-urlencoded" } });
+        if (member) {
+            console.log("User in Discord server");
+            res.json({ success: true, message: "User is in the Discord server!" });
+        } else {
+            console.log("User not in Discord server");
+            res.json({ success: false, message: "User is not in the server." });
+        }
+    } catch (error) {
+        if(error?.rawError?.message === "Unknown Member") {
+            console.log("User not in Discord server");
+            res.json({ success: false, message: "User is not in the server." });
+        }
+        console.error("Failed to check user membership", error?.rawError);
+        res.status(500).json({ error: "Failed to check user membership", details: error.message });
+    }
+});
 
-//         const accessToken = tokenResponse.data.access_token;
+client.login(BOT_TOKEN);
 
-//         // 🔥 Fetch user ID
-//         const userResponse = await axios.get("https://discord.com/api/users/@me", {
-//             headers: { Authorization: `Bearer ${accessToken}` }
-//         });
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
 
-//         const userId = userResponse.data.id;
-
-//         // 🔥 Automatically add the user to your server
-//         const guildId = yourServerId; // Replace with your server ID
-//         await axios.put(`https://discord.com/api/guilds/${guildId}/members/${userId}`, {
-//             access_token: accessToken
-//         }, {
-//             headers: { 
-//                 Authorization: `Bot YOUR_BOT_TOKEN`,
-//                 "Content-Type": "application/json"
-//             }
-//         });
-
-//         // Redirect user back with confirmation
-//         res.redirect(`http://localhost:3000/dashboard?joined=true&userId=${userId}`);
-//     } catch (error) {
-//         console.error("Discord Auth Error:", error);
-//         res.status(500).send("Authentication failed");
-//     }
-// });
-
-
-// // Log in the bot
-// client.login(token);
+module.exports = router;
