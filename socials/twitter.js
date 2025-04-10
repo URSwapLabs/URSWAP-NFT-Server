@@ -64,7 +64,7 @@ router.get(
         const walletAddress = req.signedCookies.walletAddress;
         console.log("Wallet Address:", walletAddress);
 
-        console.log("Twitter User ID:", twitterUserId);
+        console.log("Twitter User:", req.user);
 
         res.cookie("twitterUserId", twitterUserId, {
             httpOnly: true,
