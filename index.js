@@ -31,11 +31,11 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: true,
-        sameSite: "None",
-        httpOnly: true,
-      },
+    // cookie: {
+    //     secure: true,
+    //     sameSite: "None",
+    //     httpOnly: true,
+    //   },
 }));
 
 app.use(passport.initialize());
