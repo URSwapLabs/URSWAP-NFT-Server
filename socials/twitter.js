@@ -65,7 +65,7 @@ router.get(
 
         const twitterUserId = req.user.id;
         const userName = req.user.username;
-        const displayName = req.user.displayname;
+        const displayName = req.user.displayName;
         const walletAddress = req.signedCookies.walletAddress;
 
         if(walletAddress) {

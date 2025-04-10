@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const socialSchema = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
+    userId: { type: String, unique: true },
     userName: { tyep: String },
     displayName: { type: String },
     userIcon: { type: String },
@@ -13,14 +13,14 @@ const userSchema = new mongoose.Schema({
     imageURI: { type: String },
     email: { type: String },
     socials: {
-        discord: { type: {socialSchema}, default: {} },
-        twitter: { type: {socialSchema}, default: {} },
-        telegram: { type: {socialSchema}, default: {} },
-        youtube: { type: {socialSchema}, default: {} },
-        tiktok: { type: {socialSchema}, default: {} },
-        instagram: { type: {socialSchema}, default: {} },
-        pinterest: { type: {socialSchema}, default: {} },
-        thread: { type: {socialSchema}, default: {} },
+        discord: { type: socialSchema, default: {} },
+        twitter: { type: socialSchema, default: {} },
+        telegram: { type: socialSchema, default: {} },
+        youtube: { type: socialSchema, default: {} },
+        tiktok: { type: socialSchema, default: {} },
+        instagram: { type: socialSchema, default: {} },
+        pinterest: { type: socialSchema, default: {} },
+        thread: { type: socialSchema, default: {} },
     }
 });
 

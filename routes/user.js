@@ -8,6 +8,8 @@ router.post('/addSocialAccount', async (req, res) => {
     try {
         const { walletAddress, socialType, userId, userName, displayName, userIcon } = req.body;
 
+        console.log("Received data: ", req.body);
+
         let user = await USER.findOne({ walletAddress });
 
         if (!user) {
