@@ -36,14 +36,14 @@ router.get("/auth/discord/callback", async (req, res) => {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        console.log("Session data after login: ", userResponse.data);
+        console.log("Session data after login: ", userResponse.data.id);
 
         res.cookie("discordUser", userResponse.data.id, {
             httpOnly: true,
-            secure: true, // HTTPS only
-            sameSite: "none", // Cross-site allowed
-            signed: true, // Signed cookie
-            maxAge: 15 * 60 * 1000, // 15 minutes
+            secure: true,
+            sameSite: "none",
+            signed: true,
+            maxAge: 15 * 60 * 1000,
         });
 
         // req.session.save(() => {

@@ -24,43 +24,42 @@ const TWITTER_USER_ID = process.env.TWITTER_USER_ID;
 passport.use(
     new TwitterStrategy(
         {
-            consumerKey: TWITTER_CLIENT_ID, // API Key
-            consumerSecret: TWITTER_CLIENT_SECRET, // API Secret
-            callbackURL: TWITTER_REDIRECT_URI, // Redirect URL after Twitter authentication
+            consumerKey: TWITTER_CLIENT_ID,
+            consumerSecret: TWITTER_CLIENT_SECRET,
+            callbackURL: TWITTER_REDIRECT_URI,
         },
         function (token, tokenSecret, profile, done) {
-            // if (error) {
-            //     console.log("Error occurred during Twitter authentication:", error);
-            //     return done(error);
-            // }
-            console.log("Token:", token);  // Log to debug the token
+            console.log("Token:", token);
             console.log("Token Secret:", tokenSecret);
-            // Store user info (including userId) in the session
             return done(null, profile);
         }
     )
 );
 
-router.get("/auth/twitter", passport.authenticate("twitter"));
+router.get("/auth/twitter", (req, res, next) => {
+    req.session.walletAddress = req.query.walletAddress;
+    next();
+    passport.authenticate("twitter")
+});
 
 router.get(
     "/auth/callback",
     passport.authenticate("twitter", {
-        failureRedirect: "/failure", // Redirect on failure
+        failureRedirect: "/failure",
     }),
     (req, res) => {
-        // Get userId from the Twitter profile
         const twitterUserId = req.user.id;
+        const walletAddress = req.session.walletAddress;
+        console.log("Wallet Address:", walletAddress);
 
         console.log("Twitter User ID:", twitterUserId);
 
-        // Set a signed HTTP-only cookie with the Twitter user ID
         res.cookie("twitterUserId", twitterUserId, {
-            httpOnly: true,  // Ensures the cookie is not accessible via JavaScript (only accessible by the server)
-            secure: process.env.NODE_ENV === "production",  // Set to true if using HTTPS in production
-            sameSite: "None",  // Ensures the cookie is sent with cross-origin requests
-            signed: true,  // Signs the cookie (to prevent tampering)
-            maxAge: 15 * 60 * 1000,  // Cookie expiration time (15 minutes)
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            signed: true,
+            maxAge: 15 * 60 * 1000,
         });
 
         res.redirect("https://urswap-marketplace.vercel.app/follow");
@@ -94,7 +93,6 @@ router.get("/verifyTwitter", async (req, res) => {
             }
         );
 
-        // If the response contains data, the user follows your account
         console.log("Response data:", response.data);
         const followsYou = response.data.data !== undefined;
 
