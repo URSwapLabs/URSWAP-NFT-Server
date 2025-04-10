@@ -38,8 +38,7 @@ passport.use(
 
 router.get("/auth/twitter", (req, res, next) => {
     req.session.walletAddress = req.query.walletAddress;
-    next();
-    passport.authenticate("twitter")
+    return passport.authenticate("twitter")(req, res, next);
 });
 
 router.get(
