@@ -66,7 +66,7 @@ router.get(
         const walletAddress = req.signedCookies.walletAddress;
 
         if(walletAddress) {
-            await axios.post('/addSocialAccount', {
+            await axios.post('https://nft-cors-server-production.up.railway.app/user/addSocialAccount', {
                 walletAddress,
                 socialType: 'twitter',
                 userId: twitterUserId,
@@ -76,8 +76,6 @@ router.get(
         } else {
             console.log("Wallet Not Found");
         }
-
-        console.log("Twitter User:", req.user);
 
         res.cookie("twitterUserId", twitterUserId, {
             httpOnly: true,
