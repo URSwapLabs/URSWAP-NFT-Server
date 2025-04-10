@@ -29,8 +29,8 @@ passport.use(
             callbackURL: TWITTER_REDIRECT_URI,
         },
         function (token, tokenSecret, profile, done) {
-            console.log("Token:", token);
-            console.log("Token Secret:", tokenSecret);
+            // console.log("Token:", token);
+            // console.log("Token Secret:", tokenSecret);
             return done(null, profile);
         }
     )
