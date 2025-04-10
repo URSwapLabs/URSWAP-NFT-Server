@@ -29,8 +29,8 @@ passport.use(
             callbackURL: TWITTER_REDIRECT_URI,
         },
         function (token, tokenSecret, profile, done) {
-            // console.log("Token:", token);
-            // console.log("Token Secret:", tokenSecret);
+            console.log("Token:", token);
+            console.log("Token Secret:", tokenSecret);
             return done(null, profile);
         }
     )
@@ -60,9 +60,12 @@ router.get(
         failureRedirect: "/failure",
     }),
     async (req, res) => {
+
+        console.log("User Profile:", req.user);
+
         const twitterUserId = req.user.id;
         const userName = req.user.username;
-        const displayName = req.user.displayName;
+        const displayName = req.user.displayname;
         const walletAddress = req.signedCookies.walletAddress;
 
         if(walletAddress) {
