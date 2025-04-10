@@ -61,10 +61,8 @@ router.get(
     }),
     async (req, res) => {
 
-        console.log("User Profile:", req.user);
-
         const twitterUserId = req.user.id;
-        const userName = req.user.username;
+        const userName = req.user.screen_name;
         const displayName = req.user.displayName;
         const walletAddress = req.signedCookies.walletAddress;
 
