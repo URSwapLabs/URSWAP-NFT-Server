@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const socialSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true },
     userName: { tyep: String },
+    displayName: { type: String },
     userIcon: { type: String },
 })
 

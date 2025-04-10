@@ -6,7 +6,7 @@ const router = express.Router();
 // Add a Social Account
 router.post('/addSocialAccount', async (req, res) => {
     try {
-        const { walletAddress, socialType, userId, userName, userIcon } = req.body;
+        const { walletAddress, socialType, userId, userName, displayName, userIcon } = req.body;
 
         let user = await USER.findOne({ walletAddress });
 
@@ -17,7 +17,7 @@ router.post('/addSocialAccount', async (req, res) => {
             });
         }
 
-        user.socials[socialType] = { userId, userName, userIcon };
+        user.socials[socialType] = { userId, userName, displayName, userIcon };
         await user.save();
 
         return res.status(200).json({ success: true, message: 'Social account added successfully' });

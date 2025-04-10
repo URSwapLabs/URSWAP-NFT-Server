@@ -59,10 +59,23 @@ router.get(
     passport.authenticate("twitter", {
         failureRedirect: "/failure",
     }),
-    (req, res) => {
+    async (req, res) => {
         const twitterUserId = req.user.id;
+        const userName = req.user.username;
+        const displayName = req.user.displayName;
         const walletAddress = req.signedCookies.walletAddress;
-        console.log("Wallet Address:", walletAddress);
+
+        if(walletAddress) {
+            await axios.post('/addSocialAccount', {
+                walletAddress,
+                socialType: 'twitter',
+                userId: twitterUserId,
+                userName: userName,
+                displayName: displayName,
+            })
+        } else {
+            console.log("Wallet Not Found");
+        }
 
         console.log("Twitter User:", req.user);
 
