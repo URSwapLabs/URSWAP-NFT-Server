@@ -37,21 +37,21 @@ passport.use(
 );
 
 router.get("/auth/twitter", (req, res, next) => {
-    if (!req.query.walletAddress) {
-        return res.status(400).send("Wallet address is required");
+    const walletAddress = req.query.walletAddress;
+
+    if (!walletAddress) {
+        return res.status(400).json({ message: "Wallet address is required" });
     }
-    
-    console.log("🔐 Storing walletAddress:", req.query.walletAddress);
-    req.session.walletAddress = req.query.walletAddress;
-    
-    req.session.save((err) => {
-        if (err) {
-            console.error("Session save error:", err);
-            return next(err);
-        }
-        console.log("🔐 Session now:", req.session);
-        passport.authenticate("twitter")(req, res, next);
+
+    res.cookie("walletAddress", walletAddress, {
+        maxAge: 5 * 60 * 1000,
+        httpOnly: true,
+        signed: true,
+        secure: true,
+        sameSite: "Lax",
     });
+
+    return passport.authenticate("twitter")(req, res, next);
 });
 
 router.get(
@@ -61,7 +61,7 @@ router.get(
     }),
     (req, res) => {
         const twitterUserId = req.user.id;
-        const walletAddress = req.session.walletAddress;
+        const walletAddress = req.signedCookies.walletAddress;
         console.log("Wallet Address:", walletAddress);
 
         console.log("Twitter User ID:", twitterUserId);
