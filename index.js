@@ -4,6 +4,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const user = require('./routes/user');
+const reward = require('./routes/reward');
 const proxyRoutes = require('./routes/proxy');
 const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
@@ -21,8 +22,8 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://urswap-marketplace.vercel.app',
-    // origin: 'http://localhost:3000',
+    // origin: 'https://urswap-marketplace.vercel.app',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 app.use(express.json());
@@ -42,6 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/user', user);
+app.use('/reward', reward);
 app.use('/proxy', proxyRoutes);
 app.use('/generateNft', generateNft);
 app.use('/counter', counter);
