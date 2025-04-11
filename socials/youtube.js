@@ -15,6 +15,11 @@ const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 router.post('/verifyYoutube', async (req, res) => {
   const { token } = req.body;
 
+  console.log("token: ", token);
+  if (!token) {
+    return res.status(400).json({ error: 'Token is required' });
+  }
+
   try {
     // Get access_token from id_token
     const ticket = await oAuth2Client.verifyIdToken({
@@ -22,8 +27,12 @@ router.post('/verifyYoutube', async (req, res) => {
       audience: CLIENT_ID,
     });
 
+    console.log("ticket: ", ticket);
+
     const payload = ticket.getPayload();
     const email = payload.email;
+
+    console.log("email: ", email);
 
     // Exchange token for access_token (from Google OAuth token endpoint)
     const { data } = await axios.post('https://oauth2.googleapis.com/token', {
@@ -34,7 +43,11 @@ router.post('/verifyYoutube', async (req, res) => {
       redirect_uri: REDIRECT_URI,
     });
 
+    console.log("data: ", data);
+
     const access_token = data.access_token;
+
+    console.log("access_token: ", access_token);
 
     // Call YouTube API to get list of subscriptions
     const response = await axios.get(
@@ -43,6 +56,8 @@ router.post('/verifyYoutube', async (req, res) => {
         headers: { Authorization: `Bearer ${access_token}` },
       }
     );
+
+    console.log("response: ", response.data);
 
     const subs = response.data.items;
     const isSubscribed = subs.some(
