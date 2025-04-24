@@ -5,6 +5,8 @@ const router = express.Router();
 router.get('/auth/callback', async (req, res) => {
   const { code } = req.query;
 
+  console.log("Inside Tiktok callback");
+
   try {
     // Exchange code for access token
     const tokenRes = await axios.post('https://open.tiktokapis.com/v2/oauth/token', {
@@ -12,7 +14,7 @@ router.get('/auth/callback', async (req, res) => {
       client_secret: process.env.TIKTOK_CLIENT_SECRET,
       code: code,
       grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:8080/tiktok/auth/callback',
+      redirect_uri: 'https://nft-cors-server.onrender.com/tiktok/auth/callback',
     });
 
     const accessToken = tokenRes.data.access_token;
