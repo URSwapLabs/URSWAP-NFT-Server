@@ -18,8 +18,9 @@ passport.deserializeUser((obj, done) => {
 const TWITTER_CLIENT_ID = process.env.TWITTER_API_KEY;
 const TWITTER_CLIENT_SECRET = process.env.TWITTER_SECRET_KEY;
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
-const TWITTER_REDIRECT_URI = process.env.TWITTER_REDIRECT_URI;
 const TWITTER_USER_ID = process.env.TWITTER_USER_ID;
+
+const TWITTER_REDIRECT_URI = "https://nft-cors-server.onrender.com/twitter/auth/callback";
 
 passport.use(
     new TwitterStrategy(
