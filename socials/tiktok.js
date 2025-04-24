@@ -26,7 +26,7 @@ router.get('/auth/callback', async (req, res) => {
 
     // const userData = userRes.data.data.user;
 
-    res.redirect(`http://localhost:3000/follow?username=${userData.display_name}`);
+    res.redirect(`http://localhost:3000/follow`);
   } catch (err) {
     console.error(err.response?.data || err.message);
     res.status(500).send('TikTok login failed');
