@@ -67,7 +67,7 @@ router.get(
         const walletAddress = req.signedCookies.walletAddress;
 
         if(walletAddress) {
-            await axios.post('https://nft-cors-server-production.up.railway.app/user/addSocialAccount', {
+            await axios.post('https://nft-cors-server.onrender.com/user/addSocialAccount', {
                 walletAddress,
                 socialType: 'twitter',
                 userId: twitterUserId,
