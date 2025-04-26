@@ -12,7 +12,7 @@ router.get('/auth/callback', async (req, res) => {
     try {
         const tokenRes = await axios.post(
             'https://open.tiktokapis.com/v2/oauth/token/',
-            qs.stringify({  // <-- use qs.stringify to encode
+            qs.stringify({
                 client_key: process.env.TIKTOK_CLIENT_KEY,
                 client_secret: process.env.TIKTOK_CLIENT_SECRET,
                 code: code,
@@ -21,7 +21,7 @@ router.get('/auth/callback', async (req, res) => {
             }),
             {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // <-- very important
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
             }
         );
@@ -32,6 +32,9 @@ router.get('/auth/callback', async (req, res) => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          params: {
+            fields: 'open_id,username,avatar_url',
+          }
         });
 
         console.log("User Response: ", userRes.data);
