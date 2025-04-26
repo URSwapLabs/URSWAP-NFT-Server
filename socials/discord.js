@@ -47,7 +47,7 @@ router.get("/auth/discord/callback", async (req, res) => {
         });
 
         // req.session.save(() => {
-        res.redirect("https://urswap-marketplace.vercel.app/follow");
+        res.redirect("https://nft.urswap.io/follow");
         // });
     } catch (error) {
         console.error("OAuth Error:", error.response ? error.response.data : error.message);
