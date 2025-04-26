@@ -87,7 +87,7 @@ router.get(
             maxAge: 15 * 60 * 1000,
         });
 
-        res.redirect("https://urswap-marketplace.vercel.app/follow");
+        res.redirect("https://nft.urswap.io/follow");
     }
 );
 
