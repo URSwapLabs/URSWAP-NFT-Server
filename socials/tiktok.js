@@ -11,7 +11,7 @@ router.get('/auth/callback', async (req, res) => {
 
     try {
         const tokenRes = await axios.post(
-            'https://open.tiktokapis.com/v2/oauth/token',
+            'https://open.tiktokapis.com/v2/oauth/token/',
             qs.stringify({  // <-- use qs.stringify to encode
                 client_key: process.env.TIKTOK_CLIENT_KEY,
                 client_secret: process.env.TIKTOK_CLIENT_SECRET,
