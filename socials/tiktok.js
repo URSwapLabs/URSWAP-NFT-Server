@@ -26,21 +26,21 @@ router.get('/auth/callback', async (req, res) => {
             }
         );
 
-        console.log("TokenRes: ", tokenRes.data);
+        const accessToken = tokenRes.data.access_token;
 
-        // const accessToken = tokenRes.data.access_token;
+        const userRes = await axios.get('https://open.tiktokapis.com/v2/user/info/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-        // const userRes = await axios.get('https://open.tiktokapis.com/v2/user/info/', {
-        //   headers: {
-        //     Authorization: `Bearer ${accessToken}`,
-        //   },
-        // });
-
-        // const userData = userRes.data.data.user;
+        console.log("User Response: ", userRes.data);
+        const userData = userRes.data.data.user;
+        console.log("User Data: ", userData);
 
         res.redirect(`http://localhost:3000/follow`);
     } catch (err) {
-        console.error(err);
+        console.error(err?.response.data);
         res.status(500).send('TikTok login failed');
     }
 });
