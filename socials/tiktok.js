@@ -40,7 +40,7 @@ router.get('/auth/callback', async (req, res) => {
 
         res.redirect(`http://localhost:3000/follow`);
     } catch (err) {
-        console.error(err.response?.data || err.message);
+        console.error(err);
         res.status(500).send('TikTok login failed');
     }
 });
