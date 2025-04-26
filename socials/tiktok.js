@@ -2,6 +2,7 @@ const axios = require('axios');
 const express = require('express');
 const qs = require('qs');
 const router = express.Router();
+require('dotenv').config();
 
 router.get('/auth/callback', async (req, res) => {
     const { code } = req.query;
