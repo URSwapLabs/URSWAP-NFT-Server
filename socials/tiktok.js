@@ -8,13 +8,15 @@ router.get('/auth/callback', async (req, res) => {
   console.log("Inside Tiktok callback");
 
   try {
-    // const tokenRes = await axios.post('https://open.tiktokapis.com/v2/oauth/token', {
-    //   client_key: process.env.TIKTOK_CLIENT_KEY,
-    //   client_secret: process.env.TIKTOK_CLIENT_SECRET,
-    //   code: code,
-    //   grant_type: 'authorization_code',
-    //   redirect_uri: 'https://nft-cors-server.onrender.com/tiktok/auth/callback',
-    // });
+    const tokenRes = await axios.post('https://open.tiktokapis.com/v2/oauth/token', {
+      client_key: process.env.TIKTOK_CLIENT_KEY,
+      client_secret: process.env.TIKTOK_CLIENT_SECRET,
+      code: code,
+      grant_type: 'authorization_code',
+      redirect_uri: 'https://nft-cors-server-production.up.railway.app/tiktok/auth/callback',
+    });
+
+    console.log("TokenRes: ", tokenRes.data);
 
     // const accessToken = tokenRes.data.access_token;
 
