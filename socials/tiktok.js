@@ -4,31 +4,31 @@ const qs = require('qs');
 const router = express.Router();
 require('dotenv').config();
 
-router.get('/auth/tiktok', async (req, res) => {
-    const walletAddress = req.query.walletAddress;
+// router.get('/auth/tiktok', async (req, res) => {
+//     const walletAddress = req.query.walletAddress;
 
-    if (!walletAddress) {
-        return res.status(400).json({ message: "Wallet address is required" });
-    }
+//     if (!walletAddress) {
+//         return res.status(400).json({ message: "Wallet address is required" });
+//     }
 
-    res.cookie("walletAddress", walletAddress, {
-        maxAge: 5 * 60 * 1000,
-        httpOnly: true,
-        signed: true,
-        secure: true,
-        sameSite: "Lax",
-    });
+//     res.cookie("walletAddress", walletAddress, {
+//         maxAge: 5 * 60 * 1000,
+//         httpOnly: true,
+//         signed: true,
+//         secure: true,
+//         sameSite: "Lax",
+//     });
 
-    const redirectUri = 'https://nft-cors-server-production.up.railway.app/tiktok/auth/callback';
-    const authUrl = `https://open-api.tiktok.com/platform/oauth/connect/?client_key=${process.env.TIKTOK_CLIENT_KEY}&response_type=code&scope=user.info.basic,user.info.social&redirect_uri=${encodeURIComponent(redirectUri)}`;
+//     const redirectUri = 'https://nft-cors-server-production.up.railway.app/tiktok/auth/callback';
+//     const authUrl = `https://open-api.tiktok.com/platform/oauth/connect/?client_key=${process.env.TIKTOK_CLIENT_KEY}&response_type=code&scope=user.info.basic,user.info.social&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
-    res.redirect(authUrl);
-})
+//     res.redirect(authUrl);
+// })
 
 router.get('/auth/callback', async (req, res) => {
-    const { code } = req.query;
+    const { code, state: walletAddress } = req.query;
 
-    console.log("Inside Tiktok callback");
+    console.log("Wallet Address:", walletAddress);
 
     try {
         const tokenRes = await axios.post(
@@ -57,10 +57,6 @@ router.get('/auth/callback', async (req, res) => {
             fields: 'open_id,username,avatar_url',
           }
         });
-
-        console.log("User Response: ", userRes.data);
-        const userData = userRes.data.data.user;
-        console.log("User Data: ", userData);
 
         res.redirect(`http://localhost:3000/follow`);
     } catch (err) {
