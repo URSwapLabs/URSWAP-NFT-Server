@@ -50,13 +50,30 @@ router.get('/auth/callback', async (req, res) => {
         const accessToken = tokenRes.data.access_token;
 
         const userRes = await axios.get('https://open.tiktokapis.com/v2/user/info/', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          params: {
-            fields: 'open_id,username,avatar_url',
-          }
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+                fields: 'open_id,username,avatar_url',
+            }
         });
+
+        const tiktokUserId = userRes.data.user.open_id;
+        const username = userRes.data.user.username;
+        const avatarUrl = userRes.data.user.avatar_url;
+
+        if (walletAddress) {
+            await axios.post('https://nft-cors-server-production.up.railway.app/user/addSocialAccount', {
+                walletAddress,
+                socialType: 'tiktok',
+                userId: tiktokUserId,
+                userName: username,
+                displayName: username,
+                userIcon: avatarUrl
+            })
+        } else {
+            console.log("Wallet Not Found");
+        }
 
         res.redirect(`http://localhost:3000/follow`);
     } catch (err) {
