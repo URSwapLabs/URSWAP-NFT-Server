@@ -18,6 +18,7 @@ router.get('/auth/callback', async (req, res) => {
                 code: code,
                 grant_type: 'authorization_code',
                 redirect_uri: 'https://nft-cors-server-production.up.railway.app/tiktok/auth/callback',
+                scope: 'user.info.basic',
             }),
             {
                 headers: {
