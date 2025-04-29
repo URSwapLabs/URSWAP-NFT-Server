@@ -20,7 +20,7 @@ const TWITTER_CLIENT_SECRET = process.env.TWITTER_SECRET_KEY;
 const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
 const TWITTER_USER_ID = process.env.TWITTER_USER_ID;
 
-const TWITTER_REDIRECT_URI = "https://nft-cors-server.onrender.com/twitter/auth/callback";
+const TWITTER_REDIRECT_URI = "https://nft-cors-server-production.up.railway.app/twitter/auth/callback";
 
 passport.use(
     new TwitterStrategy(
@@ -68,7 +68,7 @@ router.get(
         const walletAddress = req.signedCookies.walletAddress;
 
         if(walletAddress) {
-            await axios.post('https://nft-cors-server.onrender.com/user/addSocialAccount', {
+            await axios.post('https://nft-cors-server-production.up.railway.app/user/addSocialAccount', {
                 walletAddress,
                 socialType: 'twitter',
                 userId: twitterUserId,
