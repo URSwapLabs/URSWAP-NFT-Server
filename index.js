@@ -17,6 +17,7 @@ const twitter = require('./socials/twitter');
 const telegram = require('./socials/telegram');
 const youtube = require('./socials/youtube');
 const tiktok = require('./socials/tiktok');
+const download = require('./routes/download');
 const connectDb = require('./db');
 require("dotenv").config();
 
@@ -59,6 +60,7 @@ app.use('/twitter', twitter);
 app.use('/telegram', telegram);
 app.use('/youtube', youtube);
 app.use('/tiktok', tiktok);
+app.use('/download', download);
 
 connectDb();
 
