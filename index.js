@@ -24,9 +24,9 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://nft.urswap.io/',
+    // origin: 'https://nft.urswap.io/',
     // origin: 'https://urswap-marketplace.vercel.app',
-    // origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000',
     // origin: `http://localhost:5116`,
     credentials: true
 }));
