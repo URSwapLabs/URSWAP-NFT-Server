@@ -87,7 +87,7 @@ router.get(
             maxAge: 15 * 60 * 1000,
         });
 
-        res.redirect("https://nft.urswap.io/follow");
+        res.redirect("https://nft.urswap.io/reward");
     }
 );
 

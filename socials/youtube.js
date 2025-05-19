@@ -7,7 +7,7 @@ const router = express.Router();
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URI = 'https://urswap-marketplace.vercel.app/follow';
+const REDIRECT_URI = 'https://nft.urswap.io/reward';
 const YOUR_CHANNEL_ID = 'UCXXXXXX'; // Replace with your channel ID
 
 const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);

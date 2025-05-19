@@ -75,7 +75,7 @@ router.get('/auth/callback', async (req, res) => {
             console.log("Wallet Not Found");
         }
 
-        res.redirect(`http://localhost:3000/follow`);
+        res.redirect(`https://nft.urswap.io/reward`);
     } catch (err) {
         console.error(err?.response.data);
         res.status(500).send('TikTok login failed');
