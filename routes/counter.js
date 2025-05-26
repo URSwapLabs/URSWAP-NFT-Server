@@ -16,9 +16,12 @@ router.post('/updateCounter', async (req, res) => {
         if (!counter) {
             return res.status(404).json({ success: false, message: "Not Found" });
         } else {
-            
+
             counter.nftGenerations += 1;
-            counter.imageURI = imageURI;
+            counter.imageURIs.push(imageURI);
+            if (counter.imageURIs.length > 3) {
+                counter.imageURIs = counter.imageURIs.slice(-3);
+            }
             if (counter.nftGenerations >= process.env.NFT_LIMIT) {
                 counter.isPaid = false;
             }
@@ -47,15 +50,15 @@ router.post("/setPaid", async (req, res) => {
             counter = new Counter({
                 walletAddress,
                 nftGenerations: 1,
-                imageURI: "",
+                imageURI: [],
                 isPaid: true
             })
             await counter.save();
         } else {
             counter.nftGenerations = 0;
             counter.isPaid = true;
-            counter.imageURI = "",
-            await counter.save();
+            counter.imageURIs = "",
+                await counter.save();
         }
 
         return res.status(200).json({ success: true, message: "$UR Paid Successfully" });
@@ -80,7 +83,7 @@ router.post("/clearCounter", async (req, res) => {
             return res.status(404).json({ success: false, message: "Not Found" });
         }
 
-        counter.imageURI = "";
+        counter.imageURIs = [];
         counter.nftGenerations = 0;
         counter.isPaid = false;
         await counter.save();
