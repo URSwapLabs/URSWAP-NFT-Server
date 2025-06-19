@@ -4,14 +4,15 @@ const collectionSchema = new mongoose.Schema({
     collectionAddress: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     symbol: { type: String, required: true },
-    imageURI: { type: String, required: true }
+    imageURI: { type: String, required: true },
+    type: { type: String, default: 'General' },
 });
 
-const counterSchema = new mongoose.Schema({
+const collectionsSchema = new mongoose.Schema({
     walletAddress: { type: String, required: true, unique: true },
-    nftCollections: { type: [collectionSchema], default: [] } // Array of unique collections
+    nftCollections: { type: [collectionSchema], default: [] }
 });
 
-const Counter = mongoose.model('Collections', counterSchema);
+const Collections = mongoose.model('Collections', collectionsSchema);
 
-module.exports = Counter;
+module.exports = Collections;

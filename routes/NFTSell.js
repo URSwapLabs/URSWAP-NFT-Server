@@ -7,7 +7,7 @@ router.post("/sell", async (req, res) => {
         const { collectionAddress, seller, nfts } = req.body;
 
         if (!collectionAddress || !seller || !nfts || !Array.isArray(nfts)) {
-            return res.status(400).json({ message: "Invalid request data" });
+            return res.status(400).json({ success: false, message: "Invalid request data" });
         }
 
         let nftSale = await NFTSell.findOne({ collectionAddress, seller });
@@ -19,9 +19,9 @@ router.post("/sell", async (req, res) => {
         }
 
         await nftSale.save();
-        res.status(201).json({ message: "NFT(s) listed successfully", data: nftSale });
+        res.status(201).json({ success: true, message: "NFT(s) listed successfully", data: nftSale });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 });
 
@@ -34,18 +34,41 @@ router.get("/listings", async (req, res) => {
     }
 });
 
-router.get("/listings/:collectionAddress", async (req, res) => {
+router.get("/listing", async (req, res) => {
     try {
-        const { collectionAddress } = req.params;
-        const listings = await NFTSell.find({ collectionAddress });
+        const { collectionAddress, nftId } = req.query;
 
-        if (!listings.length) {
-            return res.status(404).json({ message: "No listings found" });
+        const listing = await NFTSell.findOne({
+            collectionAddress,
+            "nfts.nftId": nftId
+        });
+
+        if (!listing) {
+            return res.status(200).json({ success: false, message: "NFT listing not found" });
         }
 
-        res.status(200).json(listings);
+        const nft = listing.nfts.find(nft => nft.nftId === nftId);
+
+        res.status(200).json({ success: true, nft });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    }
+});
+
+router.get("/listing", async (req, res) => {
+    try {
+        const { collectionAddress, nftId } = req.query;
+        const listing = await NFTSell.findOne({
+            collectionAddress,
+            "nfts.nftId": nftId
+        });
+        if (!listing) {
+            return res.status(404).json({ success: false, message: "NFT listing not found" });
+        }
+        const nft = listing.nfts.find(nft => nft.nftId === nftId);
+        res.status(200).json({ success: true, nft: nft });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 });
 

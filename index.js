@@ -9,8 +9,10 @@ const proxyRoutes = require('./routes/proxy');
 const generateNft = require('./routes/generateNft');
 const counter = require('./routes/counter');
 const collection = require('./routes/collection');
+const nft = require('./routes/marketplace');
 const position = require('./routes/position');
 const nftBuy = require('./routes/NFTBuy');
+const nftSell = require('./routes/NFTSell');
 const nftAuction = require('./routes/auctionNFT');
 const discord = require('./socials/discord');
 const twitter = require('./socials/twitter');
@@ -24,8 +26,8 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://nft.urswap.io',
-    // origin: 'http://localhost:3000',
+    // origin: 'https://nft.urswap.io',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 app.use(express.json());
@@ -45,15 +47,17 @@ app.use('/proxy', proxyRoutes);
 app.use('/generateNft', generateNft);
 app.use('/counter', counter);
 app.use('/collection', collection);
+app.use('/nft', nft);
 app.use('/position', position);
 app.use('/nftBuy', nftBuy);
+app.use('/nftSell', nftSell);
 app.use('/nftAuction', nftAuction);
 app.use('/discord', discord);
 app.use('/twitter', twitter);
 app.use('/telegram', telegram);
 app.use('/youtube', youtube);
 app.use('/tiktok', tiktok);
-app.use('/download', download);
+// app.use('/download', download);
 
 connectDb();
 

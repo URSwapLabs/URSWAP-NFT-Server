@@ -135,4 +135,31 @@ router.get("/checkCollection", async (req, res) => {
     }
 });
 
+router.post('/nftTypes', async (req, res) => {
+    const { collectionAddresses } = req.body;
+
+    if (!Array.isArray(collectionAddresses) || collectionAddresses.length === 0) {
+        return res.status(400).json({ success: false, error: 'collectionAddresses must be a non-empty array.' });
+    }
+
+    try {
+        const result = await Collection.aggregate([
+            { $unwind: "$nftCollections" },
+            { $match: { "nftCollections.collectionAddress": { $in: collectionAddresses } } },
+            {
+                $project: {
+                    _id: 0,
+                    collectionAddress: "$nftCollections.collectionAddress",
+                    type: "$nftCollections.type"
+                }
+            }
+        ]);
+
+        res.json({ success: true, result });
+    } catch (err) {
+        console.error("Error fetching NFT types:", err);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+});
+
 module.exports = router;
